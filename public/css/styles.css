@@ -1,0 +1,253 @@
+:root {
+    --discord-blurple: #5865F2;
+    --discord-green: #57F287;
+    --discord-yellow: #FEE75C;
+    --discord-fuchsia: #EB459E;
+    --discord-red: #ED4245;
+    --discord-white: #FFFFFF;
+    --discord-black: #23272A;
+    --discord-dark: #2C2F33;
+    --discord-not-quite-black: #2C2F33;
+    --discord-greyple: #99AAB5;
+    --discord-dark-but-not-black: #2F3136;
+    --discord-link: #00b0f4;
+}
+
+body {
+    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--discord-dark);
+    color: var(--discord-white);
+}
+
+header {
+    background-color: var(--discord-not-quite-black);
+    color: var(--discord-white);
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 1px 0 rgba(4,4,5,0.2),0 1.5px 0 rgba(6,6,7,0.05),0 2px 0 rgba(4,4,5,0.05);
+}
+
+nav ul {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--discord-link);
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: var(--discord-link);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover, nav ul li a:focus {
+    color: var(--discord-white);
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+footer {
+    background-color: var(--discord-not-quite-black);
+    color: var(--discord-white);
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--discord-white);
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--discord-greyple);
+    border-radius: 3px;
+    background-color: var(--discord-white);
+    color: var(--discord-black);
+}
+
+button {
+    background-color: var(--discord-blurple);
+    color: var(--discord-white);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, button:focus {
+    background-color: #4752C4;
+    text-decoration: underline;
+}
+
+.event-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    background-color: var(--discord-dark-but-not-black);
+    border-radius: 5px;
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover, .event-card:focus-within {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-panel {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .admin-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+.admin-menu {
+    background-color: var(--discord-dark-but-not-black);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.admin-content {
+    padding: 20px;
+    background-color: var(--discord-dark-but-not-black);
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: none;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--discord-not-quite-black);
+    color: var(--discord-white);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(79, 84, 92, 0.16);
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+
+    .event-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Amélioration de l'accessibilité */
+a:focus, button:focus, input:focus, textarea:focus {
+    outline: 2px solid var(--discord-blurple);
+    outline-offset: 2px;
+}
+
+/* Classe pour le texte à contraste élevé */
+.high-contrast {
+    color: var(--discord-white);
+    font-weight: bold;
+}
+
+.registered {
+    background-color: #43b581;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.event-card {
+    /* ... autres styles existants ... */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.event-card button,
+.event-card .registered {
+    margin-top: auto;
+}
+
+.unregister-btn {
+    background-color: var(--discord-red);
+    color: var(--discord-white);
+    margin-top: 10px;
+}
+
+.unregister-btn:hover, .unregister-btn:focus {
+    background-color: #a12828;
+}
+
+.event-card {
+    /* ... autres styles existants ... */
+    display: flex;
+    flex-direction: column;
+}
+
+.event-card .registered {
+    margin-top: auto;
+}
+
+.event-card button {
+    margin-top: 10px;
+}
