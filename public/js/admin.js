@@ -13,6 +13,7 @@ async function loadAdminEventsPage() {
                 <!-- Le contenu sera injecté ici -->
             </div>
         </div>
+        <div id="error-message"></div>
     `;
     document.getElementById('add-event-link').addEventListener('click', showAddEventForm);
     document.getElementById('list-events-link').addEventListener('click', showEventsList);
@@ -62,7 +63,7 @@ async function handleAddEvent(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/events', {
+        const response = await fetch('http://localhost:3000/events', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,20 +75,20 @@ async function handleAddEvent(event) {
         const data = await response.json();
 
         if (response.ok) {
-            alert('Événement ajouté avec succès');
-            showEventsList();
+            displayMessage('Événement ajouté avec succès', 'green');
+            document.getElementById('add-event-form').reset();
         } else {
-            alert(data.erreur || 'Erreur lors de l\'ajout de l\'événement');
+            displayMessage(data.erreur || 'Erreur lors de l\'ajout de l\'événement', 'red');
         }
     } catch (error) {
         console.error('Erreur:', error);
-        alert('Une erreur est survenue lors de l\'ajout de l\'événement');
+        displayMessage('Une erreur est survenue lors de l\'ajout de l\'événement', 'red');
     }
 }
 
 async function showEventsList() {
     const adminContent = document.getElementById('admin-content');
-    adminContent.innerHTML = '<h2>Liste des événements</h2>';
+    adminContent.innerHTML = '<h2>Liste des événements</h2><div id="error-message"></div>';
 
     try {
         const events = await getEvents();
@@ -122,7 +123,7 @@ async function showEventsList() {
         }
     } catch (error) {
         console.error('Erreur:', error);
-        adminContent.innerHTML += '<p>Erreur lors du chargement des événements.</p>';
+        displayMessage('Erreur lors du chargement des événements.', 'red');
     }
 }
 
@@ -141,7 +142,7 @@ function formatDateToFrench(dateString) {
 async function showEventParticipants(eventId) {
     const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`http://localhost:8080/events/${eventId}/participants`, {
+        const response = await fetch(`http://localhost:3000/events/${eventId}/participants`, {
             headers: {
                 'token': token
             }
@@ -180,11 +181,11 @@ async function showEventParticipants(eventId) {
 
             adminContent.innerHTML += '<button onclick="showEventsList()">Retour à la liste des événements</button>';
         } else {
-            alert(data.erreur || 'Erreur lors de la récupération des participants');
+            displayMessage(data.erreur || 'Erreur lors de la récupération des participants', 'red');
         }
     } catch (error) {
         console.error('Erreur:', error);
-        alert('Une erreur est survenue lors de la récupération des participants');
+        displayMessage('Une erreur est survenue lors de la récupération des participants', 'red');
     }
 }
 
@@ -212,6 +213,7 @@ function loadAdminUsersPage() {
             </div>
             <button type="submit">Ajouter l'utilisateur</button>
         </form>
+        <div id="error-message"></div>
     `;
     document.getElementById('add-user-form').addEventListener('submit', handleAddUser);
 }
@@ -226,7 +228,7 @@ async function handleAddUser(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:8080/addUser', {
+        const response = await fetch('http://localhost:3000/addUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -236,16 +238,27 @@ async function handleAddUser(event) {
         });
 
         const data = await response.json();
+        console.log(data);
 
         if (response.ok) {
-            alert('Utilisateur ajouté avec succès');
-            // Réinitialiser le formulaire
             document.getElementById('add-user-form').reset();
+            displayMessage('Utilisateur ajouté avec succès', 'green');
         } else {
-            alert(data.erreur || 'Erreur lors de l\'ajout de l\'utilisateur');
+            displayMessage(data.erreur || 'Erreur lors de l\'ajout de l\'utilisateur', 'red');
         }
     } catch (error) {
         console.error('Erreur:', error);
-        alert('Une erreur est survenue lors de l\'ajout de l\'utilisateur');
+        displayMessage('Une erreur est survenue lors de l\'ajout de l\'utilisateur', 'red');
     }
 }
+
+function displayMessage(message, color = 'red') {
+    const messageDiv = document.getElementById('error-message');
+    if (messageDiv) {
+        messageDiv.innerHTML = `<p style="color: ${color};">${message}</p>`;
+        // Faire défiler jusqu'au message
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Remplacer toutes les occurrences de displayError par displayMessage dans le fichier

@@ -1,15 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialisation
-    updateNavigation();
-    loadLoginPage();
+    checkAuthAndLoadPage();
 });
+
+function checkAuthAndLoadPage() {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+
+    if (token && role) {
+        updateNavigation();
+        if (role === 'admin') {
+            loadAdminEventsPage();
+        } else {
+            loadUserEventsPage();
+        }
+    } else {
+        // Si pas de token ou de rôle, on supprime tout et on affiche la page de connexion
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        updateNavigation();
+        loadLoginPage();
+    }
+}
 
 function updateNavigation() {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('userRole');
     const nav = document.getElementById('main-nav');
 
-    if (token) {
+    if (token && role) {
         if (role === 'admin') {
             nav.innerHTML = `
                 <ul>
@@ -40,8 +59,7 @@ function updateNavigation() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
-    updateNavigation();
-    loadLoginPage();
+    checkAuthAndLoadPage();
 }
 
 function loadLoginPage() {
@@ -59,13 +77,14 @@ function loadLoginPage() {
             </div>
             <button type="submit">Se connecter</button>
         </form>
+        <div id="login-error"></div>
     `;
     document.getElementById('login-form').addEventListener('submit', handleLogin);
 }
 
 async function getEvents() {
     try {
-        const response = await fetch('http://localhost:8080/events', {
+        const response = await fetch('http://localhost:3000/events', {
             headers: {
                 'Content-Type': 'application/json',
                 'token': localStorage.getItem('token')
@@ -84,4 +103,29 @@ async function getEvents() {
         console.error('Erreur:', error);
         return [];
     }
+}
+
+function showConfirmModal(message, onConfirm) {
+    const modal = document.getElementById('confirmModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const confirmButton = document.getElementById('modalConfirm');
+    const cancelButton = document.getElementById('modalCancel');
+
+    modalMessage.textContent = message;
+    modal.style.display = 'block';
+
+    confirmButton.onclick = () => {
+        modal.style.display = 'none';
+        onConfirm();
+    };
+
+    cancelButton.onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
 }
